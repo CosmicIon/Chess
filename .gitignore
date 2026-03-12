@@ -1,1 +1,8 @@
+# Project docs
 todo.md
+
+# Build artifacts
+build/
+*.o
+*.exe
+chess
