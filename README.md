@@ -108,7 +108,6 @@ Chess/
 ├── include/        # Header files (.h)
 ├── build/          # Compiled object files (generated)
 ├── Makefile        # Build configuration
-├── prd.md          # Product requirements document
 ├── todo.md         # Development checklist
 └── README.md
 ```
