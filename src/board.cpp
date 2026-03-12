@@ -13,7 +13,7 @@ void initBoard() {
         } 
     }
     
-    //setup the white pieces in rank 1
+    //setup the white pieces in rank 1.
     board[0][0] = W_ROOK;
     board[0][1] = W_KNIGHT;
     board[0][2] = W_BISHOP;
@@ -28,7 +28,7 @@ void initBoard() {
         board[1][f] = W_PAWN;
     } 
 
-    //setup black pawns in rank 7
+    //setup black pawns in rank 7.
     for (int f = 0; f < 8; f++) board[6][f] = B_PAWN;
 
     //setup the black pieces in rank 8.
@@ -44,7 +44,7 @@ void initBoard() {
 
 static char pieceToChar(int piece) {
     switch (piece) {
-        case EMPTY:     return '.';
+        case EMPTY:     return '-';
         case W_PAWN:    return 'P';
         case W_KNIGHT:  return 'N';
         case W_BISHOP:  return 'B';
@@ -62,13 +62,15 @@ static char pieceToChar(int piece) {
 }
 
 void printBoard() {
+    cout << "   _________________" << endl;
     for (int r = 7; r > -1; r--) {
         cout << (r + 1) << " | ";
         for (int f = 0; f < 8; f++) {
             cout << pieceToChar(board[r][f]) << " ";
         }
+        cout << "|";
         cout << endl;
     }
-    cout << "  |________________" << endl;
+    cout << "  |_________________|" << endl;
     cout << "    a b c d e f g h" << endl;
 }
