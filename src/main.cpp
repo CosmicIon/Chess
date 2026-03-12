@@ -1,6 +1,7 @@
-#include <iostream>
+#include "board.h"
 
 int main() {
-    std::cout << "Hello Chess" << std::endl;
+    initBoard();
+    printBoard();
     return 0;
 }
