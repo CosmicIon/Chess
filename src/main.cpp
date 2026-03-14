@@ -1,6 +1,7 @@
 #include "board.h"
 #include "defs.h"
 #include "input.h"
+#include "validation.h"
 #include <iostream>
 #include <string>
 
@@ -25,10 +26,21 @@ int main() {
             continue; //if input is invalid, skips the loop.
         }
 
-        //check source square has a piece
-        if (board[move.srcRank][move.srcFile] == EMPTY) {
-            std::cout << "No piece at that square. Press Enter to continue." << std::endl;
+        if (!isInBounds(move.srcRank, move.srcFile) || !isInBounds(move.dstRank, move.dstFile)) {
+            std::cout << "Move is out of bounds. Press Enter to continue." << std::endl;
             std::cin.get(); std::cin.get(); //this will consume the Enter we press. that way user get a chance to read the error message.
+            continue;
+        }
+
+        //check whether user moving valid piece or not.
+        if (!isOwnPiece(board[move.srcRank][move.srcFile], whiteToMove)) {
+            std::cout << "That's not your piece! Press Enter to continue." << std::endl;
+            std::cin.get(); std::cin.get();
+            continue;
+        }
+        if (isOwnPiece(board[move.dstRank][move.dstFile], whiteToMove)) {
+            std::cout << "You can't capture your own piece! Press Enter to continue." << std::endl;
+            std::cin.get(); std::cin.get();
             continue;
         }
 
