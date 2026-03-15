@@ -44,8 +44,17 @@ int main() {
             continue;
         }
 
+        const int movingPiece = board[move.srcRank][move.srcFile];
+        //pawn move check.
+        if ((movingPiece == W_PAWN || movingPiece == B_PAWN) &&
+            !isValidPawnMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile, whiteToMove)) {
+            std::cout << "Illegal pawn move! Press Enter to continue." << std::endl;
+            std::cin.get(); std::cin.get();
+            continue;
+        }
+
         //making the move .. without checking any rule for now.
-        board[move.dstRank][move.dstFile] = board[move.srcRank][move.srcFile];
+        board[move.dstRank][move.dstFile] = movingPiece;
         board[move.srcRank][move.srcFile] = EMPTY;
 
         whiteToMove = !whiteToMove;
