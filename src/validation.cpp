@@ -41,7 +41,7 @@ bool isValidPawnMove(int srcRank, int srcFile, int dstRank, int dstFile, bool wh
     //pawn move 2 square from start rank.
     if (fileDiff == 0 && rankDiff == 2 * direction && srcRank == startRank) {
         const int middleRank = srcRank + direction;
-        return board[middleRank][dstFile] == EMPTY && board[dstRank][dstFile] == EMPTY;
+        return board[middleRank][srcFile] == EMPTY && board[dstRank][dstFile] == EMPTY;
     }
 
     //pawn diagonal capture enemy piece.
@@ -49,5 +49,19 @@ bool isValidPawnMove(int srcRank, int srcFile, int dstRank, int dstFile, bool wh
         return isEnemyPiece(board[dstRank][dstFile], whiteToMove);
     }
 
+    return false;
+}
+
+bool isValidKnightMove(int srcRank, int srcFile, int dstRank, int dstFile) {
+    if (!isInBounds(srcRank, srcFile) || !isInBounds(dstRank, dstFile)) {
+        return false;
+    }
+    const int rankDiff = dstRank - srcRank;
+    const int fileDiff = dstFile - srcFile;
+    
+    //L-shape movement of knight.
+    if((std::abs(fileDiff) == 1 && std::abs(rankDiff) == 2) || (std::abs(fileDiff) == 2 && std::abs(rankDiff) == 1)) {
+        return true;
+    }
     return false;
 }

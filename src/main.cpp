@@ -10,7 +10,7 @@ int main() {
     bool whiteToMove = true;
 
     while (true) {
-        system("cls"); //to clear the terminal screen.
+        //system("cls"); //to clear the terminal screen.
         printBoard();
 
         std::cout << (whiteToMove ? "White" : "Black") << " to move: ";
@@ -49,6 +49,13 @@ int main() {
         if ((movingPiece == W_PAWN || movingPiece == B_PAWN) &&
             !isValidPawnMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile, whiteToMove)) {
             std::cout << "Illegal pawn move! Press Enter to continue." << std::endl;
+            std::cin.get(); std::cin.get();
+            continue;
+        }
+
+        //knight move check.
+        if((movingPiece == W_KNIGHT || movingPiece == B_KNIGHT) && !isValidKnightMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile)) {
+            std::cout << "Illegal knight move! Press Enter to continue." << std::endl;
             std::cin.get(); std::cin.get();
             continue;
         }
