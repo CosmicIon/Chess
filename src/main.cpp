@@ -17,7 +17,7 @@ int main() {
         std::string input;
         std::cin >> input;
 
-        if (input == "quit") {
+        if (input == "quit" || input == "exit") {
             break;
         }
 
@@ -59,6 +59,13 @@ int main() {
             std::cin.get(); std::cin.get();
             continue;
         }
+
+        //king move check.
+        if((movingPiece == W_KING || movingPiece == B_KING) && !isValidKingMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile)) {
+            std::cout << "Illegal king move! Press Enter to continue." << std::endl;
+            std::cin.get(); std::cin.get();
+            continue;
+        } 
 
         //making the move .. without checking any rule for now.
         board[move.dstRank][move.dstFile] = movingPiece;
