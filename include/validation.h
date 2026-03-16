@@ -9,5 +9,6 @@ bool isInBounds(int rank, int file);
 bool isValidPawnMove(int srcRank, int srcFile, int dstRank, int dstFile, bool whiteToMove);
 bool isValidKnightMove(int srcRank, int srcFile, int dstRank, int dstFile);
 bool isValidKingMove(int srcRank, int srcFile, int dstRank, int dstFile);
+bool isValidRookMove(int srcRank, int srcFile, int dstRank, int dstFile);
 
 #endif

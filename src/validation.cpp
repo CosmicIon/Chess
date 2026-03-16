@@ -72,6 +72,7 @@ bool isValidKingMove(int srcRank, int srcFile, int dstRank, int dstFile) {
     }
 
     //if king not move at all, its invalid move.
+    //No need to do it here because this error is already handled. but did it anyway.
     if(srcFile == dstFile && srcRank == dstRank) {
         return false;
     }
@@ -82,5 +83,35 @@ bool isValidKingMove(int srcRank, int srcFile, int dstRank, int dstFile) {
     if(rankDiff < 2 && fileDiff < 2) {
         return true;
     }
+    return false;
+}
+
+bool isValidRookMove(int srcRank, int srcFile, int dstRank, int dstFile) {
+    if (!isInBounds(srcRank, srcFile) || !isInBounds(dstRank, dstFile)) {
+        return false;
+    }
+
+    //horizontal move: same rank, file changes.
+    if (srcRank == dstRank) {
+        const int step = (dstFile > srcFile) ? 1 : -1;
+        for (int f = srcFile + step; f != dstFile; f += step) {
+            if (board[srcRank][f] != EMPTY) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //vertical move: same file, rank changes.
+    if (srcFile == dstFile) {
+        const int step = (dstRank > srcRank) ? 1 : -1;
+        for (int r = srcRank + step; r != dstRank; r += step) {
+            if (board[r][srcFile] != EMPTY) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     return false;
 }

@@ -67,6 +67,13 @@ int main() {
             continue;
         } 
 
+        //rook move check.
+        if((movingPiece == W_ROOK || movingPiece == B_ROOK) && !isValidRookMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile)) {
+            std::cout << "Illegal rook move! Press Enter to continue." << std::endl;
+            std::cin.get(); std::cin.get();
+            continue;
+        } 
+
         //making the move .. without checking any rule for now.
         board[move.dstRank][move.dstFile] = movingPiece;
         board[move.srcRank][move.srcFile] = EMPTY;
