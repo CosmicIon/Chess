@@ -70,8 +70,15 @@ bool isValidKingMove(int srcRank, int srcFile, int dstRank, int dstFile) {
     if (!isInBounds(srcRank, srcFile) || !isInBounds(dstRank, dstFile)) {
         return false;
     }
+
+    //if king not move at all, its invalid move.
+    if(srcFile == dstFile && srcRank == dstRank) {
+        return false;
+    }
     const int rankDiff = std::abs(dstRank - srcRank);
     const int fileDiff = std::abs(dstFile - srcFile);
+    
+    //king only move 1 step anywhere.
     if(rankDiff < 2 && fileDiff < 2) {
         return true;
     }
