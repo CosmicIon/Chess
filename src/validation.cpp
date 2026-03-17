@@ -115,3 +115,34 @@ bool isValidRookMove(int srcRank, int srcFile, int dstRank, int dstFile) {
 
     return false;
 }
+
+bool isValidBishopMove(int srcRank, int srcFile, int dstRank, int dstFile) {
+    if (!isInBounds(srcRank, srcFile) || !isInBounds(dstRank, dstFile)) {
+        return false;
+    }
+
+    const int rankDiff = std::abs(dstRank - srcRank);
+    const int fileDiff = std::abs(dstFile - srcFile);
+
+    //bishop must move in diagonal.
+    if (rankDiff != fileDiff || rankDiff == 0 || fileDiff == 0) {
+        return false;
+    }
+
+    const int rankStep = (dstRank > srcRank) ? 1 : -1;
+    const int fileStep = (dstFile > srcFile) ? 1 : -1;
+
+    int r = srcRank + rankStep;
+    int f = srcFile + fileStep;
+
+    //check if all the square between is empty or not.
+    while (r != dstRank && f != dstFile) {
+        if (board[r][f] != EMPTY) {
+            return false;
+        }
+        r += rankStep;
+        f += fileStep;
+    }
+
+    return true;
+}

@@ -6,3 +6,6 @@ build/
 *.o
 *.exe
 chess
+
+# vscode
+.vscode

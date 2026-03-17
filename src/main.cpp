@@ -74,6 +74,13 @@ int main() {
             continue;
         } 
 
+        //bishop move check.
+        if((movingPiece == W_BISHOP || movingPiece == B_BISHOP) && !isValidBishopMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile)) {
+            std::cout << "Illegal bishop move! Press Enter to continue." << std::endl;
+            std::cin.get(); std::cin.get();
+            continue;
+        }
+
         //making the move .. without checking any rule for now.
         board[move.dstRank][move.dstFile] = movingPiece;
         board[move.srcRank][move.srcFile] = EMPTY;

@@ -10,5 +10,6 @@ bool isValidPawnMove(int srcRank, int srcFile, int dstRank, int dstFile, bool wh
 bool isValidKnightMove(int srcRank, int srcFile, int dstRank, int dstFile);
 bool isValidKingMove(int srcRank, int srcFile, int dstRank, int dstFile);
 bool isValidRookMove(int srcRank, int srcFile, int dstRank, int dstFile);
+bool isValidBishopMove(int srcRank, int srcFile, int dstRank, int dstFile);
 
 #endif
