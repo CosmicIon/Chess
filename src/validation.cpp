@@ -146,3 +146,7 @@ bool isValidBishopMove(int srcRank, int srcFile, int dstRank, int dstFile) {
 
     return true;
 }
+
+bool isValidQueenMove(int srcRank, int srcFile, int dstRank, int dstFile) {
+    return(isValidBishopMove(srcRank, srcFile, dstRank, dstFile) || isValidRookMove(srcRank, srcFile, dstRank, dstFile)); //haha simple
+}
