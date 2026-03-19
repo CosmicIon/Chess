@@ -45,45 +45,14 @@ int main() {
         }
 
         const int movingPiece = board[move.srcRank][move.srcFile];
-        //pawn move check.
-        if ((movingPiece == W_PAWN || movingPiece == B_PAWN) &&
-            !isValidPawnMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile, whiteToMove)) {
-            std::cout << "Illegal pawn move! Press Enter to continue." << std::endl;
+        if (!isValidPieceMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile, whiteToMove)) {
+            std::cout << "Illegal move! Press Enter to continue." << std::endl;
             std::cin.get(); std::cin.get();
             continue;
         }
 
-        //knight move check.
-        if((movingPiece == W_KNIGHT || movingPiece == B_KNIGHT) && !isValidKnightMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile)) {
-            std::cout << "Illegal knight move! Press Enter to continue." << std::endl;
-            std::cin.get(); std::cin.get();
-            continue;
-        }
-
-        //king move check.
-        if((movingPiece == W_KING || movingPiece == B_KING) && !isValidKingMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile)) {
-            std::cout << "Illegal king move! Press Enter to continue." << std::endl;
-            std::cin.get(); std::cin.get();
-            continue;
-        } 
-
-        //rook move check.
-        if((movingPiece == W_ROOK || movingPiece == B_ROOK) && !isValidRookMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile)) {
-            std::cout << "Illegal rook move! Press Enter to continue." << std::endl;
-            std::cin.get(); std::cin.get();
-            continue;
-        } 
-
-        //bishop move check.
-        if((movingPiece == W_BISHOP || movingPiece == B_BISHOP) && !isValidBishopMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile)) {
-            std::cout << "Illegal bishop move! Press Enter to continue." << std::endl;
-            std::cin.get(); std::cin.get();
-            continue;
-        }
-
-        //queen move check.
-        if((movingPiece == W_QUEEN || movingPiece == B_QUEEN) && !isValidQueenMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile)) {
-            std::cout << "Illegal queen move! Press Enter to continue." << std::endl;
+        if (doesMoveLeaveKingInCheck(move.srcRank, move.srcFile, move.dstRank, move.dstFile, whiteToMove)) {
+            std::cout << "Illegal move: your king would be in check! Press Enter to continue." << std::endl;
             std::cin.get(); std::cin.get();
             continue;
         }

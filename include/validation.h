@@ -12,5 +12,9 @@ bool isValidKingMove(int srcRank, int srcFile, int dstRank, int dstFile);
 bool isValidRookMove(int srcRank, int srcFile, int dstRank, int dstFile);
 bool isValidBishopMove(int srcRank, int srcFile, int dstRank, int dstFile);
 bool isValidQueenMove(int srcRank, int srcFile, int dstRank, int dstFile);
+bool isValidPieceMove(int srcRank, int srcFile, int dstRank, int dstFile, bool whiteToMove);
+bool isSquareAttacked(int rank, int file, bool byWhite);
+void findKing(bool white, int &kingRank, int &kingFile);
+bool doesMoveLeaveKingInCheck(int srcRank, int srcFile, int dstRank, int dstFile, bool whiteToMove);
 
 #endif
