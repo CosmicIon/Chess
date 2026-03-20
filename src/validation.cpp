@@ -197,7 +197,7 @@ bool isSquareAttacked(int rank, int file, bool byWhite) {
         {-2, -1}, {-2, 1}, {-1, -2}, {-1, 2},
         {1, -2}, {1, 2}, {2, -1}, {2, 1}
     };
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; i++) {
         const int r = rank + knightOffsets[i][0];
         const int f = file + knightOffsets[i][1];
         if (isInBounds(r, f) && board[r][f] == attackerKnight) {
