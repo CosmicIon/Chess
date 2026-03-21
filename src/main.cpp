@@ -13,6 +13,8 @@ int main() {
         false, false, false,
         false, false, false
     };
+    int epRank = -1;
+    int epFile = -1;
 
     while (true) {
         //system("cls"); //to clear the terminal screen.
@@ -51,17 +53,23 @@ int main() {
 
         const int movingPiece = board[move.srcRank][move.srcFile];
         const int capturedPiece = board[move.dstRank][move.dstFile];
-        if (!isValidPieceMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile, whiteToMove, castlingRights)) {
+        if (!isValidPieceMove(move.srcRank, move.srcFile, move.dstRank, move.dstFile, whiteToMove, castlingRights, epRank, epFile)) {
             std::cout << "Illegal move! Press Enter to continue." << std::endl;
             std::cin.get(); std::cin.get();
             continue;
         }
 
-        if (doesMoveLeaveKingInCheck(move.srcRank, move.srcFile, move.dstRank, move.dstFile, whiteToMove)) {
+        if (doesMoveLeaveKingInCheck(move.srcRank, move.srcFile, move.dstRank, move.dstFile, whiteToMove, epRank, epFile)) {
             std::cout << "Illegal move: your king would be in check! Press Enter to continue." << std::endl;
             std::cin.get(); std::cin.get();
             continue;
         }
+
+        const bool isEnPassantMove =
+            (movingPiece == W_PAWN || movingPiece == B_PAWN) &&
+            std::abs(move.dstFile - move.srcFile) == 1 &&
+            move.dstRank == epRank && move.dstFile == epFile &&
+            board[move.dstRank][move.dstFile] == EMPTY;
 
         // Track rook captures on original squares so castling rights are revoked.
         if (capturedPiece == W_ROOK) {
@@ -101,6 +109,18 @@ int main() {
         } else {
             board[move.dstRank][move.dstFile] = movingPiece;
             board[move.srcRank][move.srcFile] = EMPTY;
+
+            if (isEnPassantMove) {
+                board[move.srcRank][move.dstFile] = EMPTY;
+            }
+        }
+
+        // En passant target only lasts for the immediate next move.
+        epRank = -1;
+        epFile = -1;
+        if ((movingPiece == W_PAWN || movingPiece == B_PAWN) && std::abs(move.dstRank - move.srcRank) == 2) {
+            epRank = (move.srcRank + move.dstRank) / 2;
+            epFile = move.srcFile;
         }
 
         // Update castling rights after king/rook moves.

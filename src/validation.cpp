@@ -93,7 +93,7 @@ bool isInBounds(int rank, int file) {
     return rank >= 0 && rank <= 7 && file >= 0 && file <= 7;
 }
 
-bool isValidPawnMove(int srcRank, int srcFile, int dstRank, int dstFile, bool whiteToMove) {
+bool isValidPawnMove(int srcRank, int srcFile, int dstRank, int dstFile, bool whiteToMove, int epRank, int epFile) {
     if (!isInBounds(srcRank, srcFile) || !isInBounds(dstRank, dstFile)) {
         return false;
     }
@@ -116,7 +116,17 @@ bool isValidPawnMove(int srcRank, int srcFile, int dstRank, int dstFile, bool wh
 
     //pawn diagonal capture enemy piece.
     if (std::abs(fileDiff) == 1 && rankDiff == direction) {
-        return isEnemyPiece(board[dstRank][dstFile], whiteToMove);
+        if (isEnemyPiece(board[dstRank][dstFile], whiteToMove)) {
+            return true;
+        }
+
+        // En passant capture to the current target square.
+        if (dstRank == epRank && dstFile == epFile && board[dstRank][dstFile] == EMPTY) {
+            const int capturedPiece = board[srcRank][dstFile];
+            return whiteToMove ? (capturedPiece == B_PAWN) : (capturedPiece == W_PAWN);
+        }
+
+        return false;
     }
 
     return false;
@@ -227,7 +237,7 @@ bool isValidQueenMove(int srcRank, int srcFile, int dstRank, int dstFile) {
     return(isValidBishopMove(srcRank, srcFile, dstRank, dstFile) || isValidRookMove(srcRank, srcFile, dstRank, dstFile)); //haha simple
 }
 
-bool isValidPieceMove(int srcRank, int srcFile, int dstRank, int dstFile, bool whiteToMove, const CastlingRights &rights) {
+bool isValidPieceMove(int srcRank, int srcFile, int dstRank, int dstFile, bool whiteToMove, const CastlingRights &rights, int epRank, int epFile) {
     if (!isInBounds(srcRank, srcFile) || !isInBounds(dstRank, dstFile)) {
         return false;
     }
@@ -236,7 +246,7 @@ bool isValidPieceMove(int srcRank, int srcFile, int dstRank, int dstFile, bool w
     switch (piece) {
         case W_PAWN:
         case B_PAWN:
-            return isValidPawnMove(srcRank, srcFile, dstRank, dstFile, whiteToMove);
+            return isValidPawnMove(srcRank, srcFile, dstRank, dstFile, whiteToMove, epRank, epFile);
         case W_KNIGHT:
         case B_KNIGHT:
             return isValidKnightMove(srcRank, srcFile, dstRank, dstFile);
@@ -369,12 +379,27 @@ void findKing(bool whiteToMove, int &kingRank, int &kingFile) {
     kingFile = -1;
 }
 
-bool doesMoveLeaveKingInCheck(int srcRank, int srcFile, int dstRank, int dstFile, bool whiteToMove) {
+bool doesMoveLeaveKingInCheck(int srcRank, int srcFile, int dstRank, int dstFile, bool whiteToMove, int epRank, int epFile) {
     const int srcPiece = board[srcRank][srcFile];
     const int dstPiece = board[dstRank][dstFile];
 
+    const bool isPawnMove = (srcPiece == W_PAWN || srcPiece == B_PAWN);
+    const bool isDiagonalPawnMove = std::abs(dstFile - srcFile) == 1;
+    const bool isEnPassantCapture =
+        isPawnMove && isDiagonalPawnMove &&
+        dstRank == epRank && dstFile == epFile &&
+        dstPiece == EMPTY;
+
+    int epCapturedPiece = EMPTY;
+    if (isEnPassantCapture) {
+        epCapturedPiece = board[srcRank][dstFile];
+    }
+
     board[dstRank][dstFile] = srcPiece;
     board[srcRank][srcFile] = EMPTY;
+    if (isEnPassantCapture) {
+        board[srcRank][dstFile] = EMPTY;
+    }
 
     int kingRank = -1;
     int kingFile = -1;
@@ -387,6 +412,9 @@ bool doesMoveLeaveKingInCheck(int srcRank, int srcFile, int dstRank, int dstFile
 
     board[srcRank][srcFile] = srcPiece;
     board[dstRank][dstFile] = dstPiece;
+    if (isEnPassantCapture) {
+        board[srcRank][dstFile] = epCapturedPiece;
+    }
 
     return inCheck;
 }
