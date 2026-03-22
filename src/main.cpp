@@ -6,6 +6,28 @@
 #include <iostream>
 #include <string>
 
+static int getPromotionPiece(bool whiteToMove, char promotionChar) {
+    if (whiteToMove) {
+        switch (promotionChar) {
+            case 'r': return W_ROOK;
+            case 'b': return W_BISHOP;
+            case 'n': return W_KNIGHT;
+            case 'q':
+            default:
+                return W_QUEEN;
+        }
+    }
+
+    switch (promotionChar) {
+        case 'r': return B_ROOK;
+        case 'b': return B_BISHOP;
+        case 'n': return B_KNIGHT;
+        case 'q':
+        default:
+            return B_QUEEN;
+    }
+}
+
 int main() {
     initBoard();
     bool whiteToMove = true;
@@ -65,6 +87,15 @@ int main() {
             continue;
         }
 
+        const bool isWhitePromotion = movingPiece == W_PAWN && move.dstRank == 7;
+        const bool isBlackPromotion = movingPiece == B_PAWN && move.dstRank == 0;
+        const bool isPromotionMove = isWhitePromotion || isBlackPromotion;
+        if (!isPromotionMove && move.promotion != '\0') {
+            std::cout << "Promotion suffix is only allowed when a pawn reaches the last rank. Press Enter to continue." << std::endl;
+            std::cin.get(); std::cin.get();
+            continue;
+        }
+
         const bool isEnPassantMove =
             (movingPiece == W_PAWN || movingPiece == B_PAWN) &&
             std::abs(move.dstFile - move.srcFile) == 1 &&
@@ -113,6 +144,11 @@ int main() {
             if (isEnPassantMove) {
                 board[move.srcRank][move.dstFile] = EMPTY;
             }
+        }
+
+        if (isPromotionMove) {
+            const char promotionChar = (move.promotion == '\0') ? 'q' : move.promotion;
+            board[move.dstRank][move.dstFile] = getPromotionPiece(whiteToMove, promotionChar);
         }
 
         // En passant target only lasts for the immediate next move.
