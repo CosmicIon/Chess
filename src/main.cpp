@@ -183,6 +183,16 @@ int main() {
             }
         }
 
+        int oppKingRank = -1;
+        int oppKingFile = -1;
+        findKing(!whiteToMove, oppKingRank, oppKingFile);
+        if (oppKingRank != -1 && oppKingFile != -1) {
+            const bool oppInCheck = isSquareAttacked(oppKingRank, oppKingFile, whiteToMove);
+            if (oppInCheck) {
+                std::cout << "Check!" << std::endl;
+            }
+        }
+
         whiteToMove = !whiteToMove;
     }
 
